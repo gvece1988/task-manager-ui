@@ -6,8 +6,16 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
+const httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    })
+  };
+
 @Injectable()
 export class ApiService {
+
   constructor(private http: HttpClient) {
   }
 
@@ -21,12 +29,14 @@ export class ApiService {
   }
 
   put(path: string, body: Object = {}): Observable<any> {
+    console.log("http put");
     return this.http.put(`${environment.api_url}${path}`, JSON.stringify(body))
       .pipe(catchError(this.formatErrors));
   }
 
   post(path: string, body: Object = {}): Observable<any> {
-    return this.http.post(`${environment.api_url}${path}`, JSON.stringify(body))
+    console.log("http post");
+    return this.http.post(`${environment.api_url}${path}`, JSON.stringify(body), httpOptions)
       .pipe(catchError(this.formatErrors));
   }
 

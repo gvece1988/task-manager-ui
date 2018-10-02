@@ -5,34 +5,29 @@ import { Task } from '../models/task.model';
 
 @Injectable()
 export class TaskService {
-  i = 1;
-  tasks: Task[] = [];
   constructor(private apiService: ApiService) { }
 
   addTask(task: Task): Observable<any> {
-    //return this.apiService.post("api/Tasklookups", task);
-    task.Id = this.i++;
-    this.tasks.unshift(task);
-    return from("1")
+    return this.apiService.post("Task");
   }
 
   updateTask(task: Task): Observable<any> {
-    //return this.apiService.post("api/Tasklookups", task);    
-    this.tasks.splice(this.tasks.indexOf(this.tasks.filter(m => m.Id == task.Id)[0], 1));   
-    this.tasks.unshift(task);
-    return from("1")
+    return this.apiService.put("api/Task", task);        
   }
 
   getAllTasks(): Observable<any> {
-    return this.apiService.get("Task/GetTaks");    
+    return this.apiService.get("Task");    
   }
 
   getTaskById(taskId: number): Observable<any> {   
-    return of(this.tasks.filter(m => m.Id == taskId));
+    return this.apiService.get("Task", {"Id": taskId});   
   }
 
   getTaskLookups(): Observable<any> {
-    //return this.apiService.get("api/Tasklookups");
-    return of([{ id: "1", name: "Task1" }, { id: "2", name: "Task2" }]);
+     return this.apiService.get("Task/GetLookups"); 
+  }
+
+  endTask(task: Task): Observable<any> {
+    return this.apiService.delete("api/Task", task);        
   }
 }

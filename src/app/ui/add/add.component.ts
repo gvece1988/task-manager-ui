@@ -28,12 +28,11 @@ export class AddComponent implements OnInit {
   }
 
   addTask() {
-    console.log(this.taskForm.value);
     this.taskService.addTask(this.taskForm.value)
       .subscribe(data => this.router.navigate(["/view"]));
   }
 
   resetForm() {
-    this.taskForm.reset();
+    this.taskForm.reset({"Priority": 0});
   }
 }
