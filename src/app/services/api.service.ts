@@ -7,11 +7,11 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    })
-  };
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  })
+};
 
 @Injectable()
 export class ApiService {
@@ -40,8 +40,8 @@ export class ApiService {
       .pipe(catchError(this.formatErrors));
   }
 
-  delete(path): Observable<any> {
-    return this.http.delete(`${environment.api_url}${path}`)
+  delete(path, params: HttpParams = new HttpParams()): Observable<any> {
+    return this.http.delete(`${environment.api_url}${path}`, { params })
       .pipe(catchError(this.formatErrors));
   }
 }
