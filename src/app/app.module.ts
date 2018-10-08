@@ -13,6 +13,7 @@ import { ApiService } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
+  { path: '', redirectTo: "/view", pathMatch: "full" },
   { path: 'add', component: AddComponent },
   { path: 'view', component: ViewComponent },
   { path: 'update/:id', component: UpdateComponent },

@@ -1,36 +1,52 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { ApiService } from './api.service';
-import { Observable, of, from } from 'rxjs';
 import { Task } from '../models/task.model';
-import { HttpParams } from '../../../node_modules/@angular/common/http';
 
 @Injectable()
 export class TaskService {
   constructor(private apiService: ApiService) { }
 
-  addTask(task: Task): Observable<any> {
-    return this.apiService.post("Task");
+  create(task: Task): Observable<any> {
+    return this.apiService.post("Task", task);
   }
 
-  updateTask(task: Task): Observable<any> {
-    return this.apiService.put("api/Task", task);
+  update(task: Task): Observable<any> {
+    return this.apiService.put("Task", task);
   }
 
-  getAllTasks(): Observable<any> {
-    return this.apiService.get("Task");
+  getAll(): Observable<any> {
+    return this.apiService.get("Task")
+      .pipe(map((tasks: Array<any>) => tasks.map(task => this.mapTask(task))));
   }
 
-  getTaskById(taskId: number): Observable<any> {
-    return this.apiService.get("Task", new HttpParams()
-      .set("Id", taskId.toString()));
+  getById(taskId: number): Observable<any> {
+    return this.apiService.get("Task", new HttpParams().set("id", taskId.toString()))
+      .pipe(map(task => this.mapTask(task)));
   }
 
   getTaskLookups(): Observable<any> {
-    return this.apiService.get("Task/GetLookups");
+    return this.apiService.get("Task/GetTaskLookups");
   }
 
-  endTask(taskId: number): Observable<any> {
-    return this.apiService.delete("api/Task", new HttpParams()
-    .set("Id", taskId.toString()));
+  end(taskId: number): Observable<any> {
+    return this.apiService.delete("Task", new HttpParams().set("id", taskId.toString()));
+  }
+
+  private mapTask(task): Task {
+    return {
+      id: task.Id,
+      title: task.Title,
+      priority: task.Priority,
+      parentTaskId: task.ParentTaskId,
+      parentTask: task.ParentTask != null ? task.ParentTask.Title : null,
+      startDate: task.StartDate,
+      endDate: task.EndDate,
+      done: task.Done
+    };
   }
 }

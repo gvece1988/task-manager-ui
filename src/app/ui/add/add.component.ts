@@ -10,29 +10,29 @@ import { Router } from '@angular/router';
 })
 export class AddComponent implements OnInit {
   taskLookups;
-  taskForm = this.fb.group({
-    Task: [null],
-    Priority: [0],
-    ParentTask: [null],
-    StartDate: [null],
-    EndDate: [null]
-  });
+  taskForm; 
 
-  constructor(private fb: FormBuilder, private taskService: TaskService,
+  constructor(private fb: FormBuilder,
+    private taskService: TaskService,
     private router: Router) {
   }
 
   ngOnInit() {
+    this.taskForm = this.fb.group({
+      title: [null],
+      priority: [0],
+      parentTaskId: [null],
+      startDate: [null],
+      endDate: [null]
+    });
+
     this.taskService.getTaskLookups()
-      .subscribe(data => this.taskLookups = data);
+      .subscribe(value => this.taskLookups = value);
   }
 
   addTask() {
-    this.taskService.addTask(this.taskForm.value)
-      .subscribe(data => this.router.navigate(["/view"]));
-  }
-
-  resetForm() {
-    this.taskForm.reset({"Priority": 0});
+    console.log(this.taskForm.value);
+    this.taskService.create(this.taskForm.value)
+      .subscribe(() => this.router.navigate(["/view"]));
   }
 }

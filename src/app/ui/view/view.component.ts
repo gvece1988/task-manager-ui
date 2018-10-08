@@ -1,7 +1,9 @@
-import { TaskService } from '../../services/task.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+
+import { TaskService } from '../../services/task.service';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-view',
@@ -9,30 +11,41 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   styleUrls: ['./view.component.css']
 })
 export class ViewComponent implements OnInit {
-  taskSearchForm = this.fb.group({
-    Task: [null],
-    PriorityFrom: [null],
-    PriorityTo: [null],
-    ParentTask: [null],
-    StartDate: [null],
-    EndDate: [null]
-  });
-  tasks;
+  tasks: Task[];
+  taskSearchForm;
 
   constructor(private taskService: TaskService,
     private fb: FormBuilder,
     private router: Router) { }
 
   ngOnInit() {
-    this.taskService.getAllTasks().subscribe(data => this.tasks = data);
+    this.taskSearchForm = this.fb.group({
+      task: [null],
+      priorityFrom: [null],
+      priorityTo: [null],
+      parentTask: [null],
+      startDate: [null],
+      endDate: [null]
+    });
+
+    this.getTasks();
   }
 
-  editTask(taskId: number) {
-    console.log(taskId);
-    this.router.navigate(["/update", taskId])
+  getTasks() {
+    this.taskService.getAll().subscribe(value => {
+      this.tasks = value;
+    });
   }
 
   searchTasks() {
     console.log(this.taskSearchForm.value);
+  }
+
+  endTask(taskId) {
+    this.taskService.end(taskId).subscribe(
+      () => {
+        alert("Task has been ended successfully");
+        this.getTasks();
+      });
   }
 }
