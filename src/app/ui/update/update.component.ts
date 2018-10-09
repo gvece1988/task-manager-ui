@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { switchMap } from 'rxjs/operators';
 
 import { TaskService } from '../../services/task.service';
-import { Task } from '../../models/task.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-update',
@@ -14,8 +14,8 @@ import { Task } from '../../models/task.model';
 })
 export class UpdateComponent implements OnInit {
   taskLookups;
-  taskForm;
-  task: Task;
+  taskForm : FormGroup;
+  submitted = false;
 
   constructor(private fb: FormBuilder,
     private taskService: TaskService,
@@ -26,18 +26,20 @@ export class UpdateComponent implements OnInit {
   ngOnInit() {
     this.taskForm = this.fb.group({
       id: [null],
-      title: [null],
+      title: [null, Validators.required],
       priority: [0],
       parentTaskId: [null],
-      startDate: [null],
-      endDate: [null]
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required]
     });
 
     this.route.params
       .pipe(switchMap(params => this.taskService.getById(params["id"])))
       .subscribe(value => {
-        this.task = value;
-        this.taskForm.patchValue(this.task);
+        //this.taskForm.patchValue(value);
+        this.taskForm.patchValue(value);
+        console.log(moment(value.startDate).format("MM/DD/YYYY"));
+        this.taskForm.controls["startDate"].setValue(moment(value.startDate).format("MM-DD-YYYY"));
       });
 
     this.taskService.getTaskLookups()
@@ -45,6 +47,11 @@ export class UpdateComponent implements OnInit {
   }
 
   updateTask() {
+    this.submitted = true;
+    if (this.taskForm.invalid) {
+      return;
+    }
+
     this.taskService.update(this.taskForm.value)
       .subscribe(value => this.router.navigate(["/view"]));
   }

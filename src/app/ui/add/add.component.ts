@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { TaskService } from '../../services/task.service';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { TaskService } from '../../services/task.service';
+import { FormUtils } from '../../shared/form.utils';
 
 @Component({
   selector: 'app-add',
@@ -10,7 +12,8 @@ import { Router } from '@angular/router';
 })
 export class AddComponent implements OnInit {
   taskLookups;
-  taskForm; 
+  taskForm;  
+  submitted = false;
 
   constructor(private fb: FormBuilder,
     private taskService: TaskService,
@@ -19,11 +22,11 @@ export class AddComponent implements OnInit {
 
   ngOnInit() {
     this.taskForm = this.fb.group({
-      title: [null],
+      title: [null, Validators.required],
       priority: [0],
       parentTaskId: [null],
-      startDate: [null],
-      endDate: [null]
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required]
     });
 
     this.taskService.getTaskLookups()
@@ -31,8 +34,16 @@ export class AddComponent implements OnInit {
   }
 
   addTask() {
-    console.log(this.taskForm.value);
+    this.submitted = true;
+    if (this.taskForm.invalid) {
+      return;
+    }
+
     this.taskService.create(this.taskForm.value)
       .subscribe(() => this.router.navigate(["/view"]));
+  }
+
+  resetForm() {
+    this.submitted = false;
   }
 }

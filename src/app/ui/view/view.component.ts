@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
+import * as _ from 'lodash';
+
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
 
@@ -11,8 +13,11 @@ import { Task } from '../../models/task.model';
   styleUrls: ['./view.component.css']
 })
 export class ViewComponent implements OnInit {
-  tasks: Task[];
+  tasksList: Task[];
+  tasks;
   taskSearchForm;
+  taskLookups;
+  hasTasks: boolean = false;
 
   constructor(private taskService: TaskService,
     private fb: FormBuilder,
@@ -20,25 +25,39 @@ export class ViewComponent implements OnInit {
 
   ngOnInit() {
     this.taskSearchForm = this.fb.group({
-      task: [null],
+      title: [null],
       priorityFrom: [null],
       priorityTo: [null],
-      parentTask: [null],
+      parentTaskId: [null],
       startDate: [null],
       endDate: [null]
     });
 
     this.getTasks();
+
+    this.taskService.getTaskLookups()
+      .subscribe(value => this.taskLookups = value);
   }
 
   getTasks() {
     this.taskService.getAll().subscribe(value => {
-      this.tasks = value;
+      this.tasksList = this.tasks = value;
+      this.hasTasks = this.tasks.length > 0;
     });
   }
 
   searchTasks() {
-    console.log(this.taskSearchForm.value);
+    let searchTerms = this.taskSearchForm.value;
+    
+    this.tasks = this.tasksList
+      .filter(task => searchTerms.title ? task.title.toUpperCase().startsWith(searchTerms.title.toUpperCase()) : true)
+      .filter(task => searchTerms.priorityFrom ? task.priority >= searchTerms.priorityFrom : true)
+      .filter(task => searchTerms.priorityTo ? task.priority <= searchTerms.priorityTo : true)
+      .filter(task => searchTerms.parentTaskId ? task.parentTaskId == searchTerms.parentTaskId : true)
+      .filter(task => searchTerms.startDate ? task.startDate >= searchTerms.startDate : true)
+      .filter(task => searchTerms.endDate ? task.endDate <= searchTerms.endDate : true);
+
+      this.hasTasks = this.tasks.length > 0;
   }
 
   endTask(taskId) {

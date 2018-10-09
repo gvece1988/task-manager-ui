@@ -4,7 +4,7 @@ export interface Task {
     priority: number;
     parentTaskId: number;    
     parentTask: string;    
-    startDate: Date;
+    startDate: string;
     endDate: Date;
     done: boolean;
 }

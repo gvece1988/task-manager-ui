@@ -1,12 +1,15 @@
-<form [formGroup]="taskSearchForm" class="card card-body bg-light" (onkeyup)="searchTasks()">
+<form [formGroup]="taskSearchForm" class="card card-body bg-light" (keyup)="searchTasks()">
   <div class="form-row">
     <div class="form-group col-sm-6">
-      <label for="task">Task:</label>
-      <input type="text" id="task" name="task" class="form-control" formControlName="task" />
+      <label for="title">Task:</label>
+      <input type="text" id="task" name="title" class="form-control" formControlName="title" />
     </div>
     <div class="form-group col-sm-6">
       <label for="parentTask">Parent Task:</label>
-      <input type="text" id="parentTask" name="parentTask" class="form-control" formControlName="parentTask" />
+      <select id="parentTask" class="form-control" formControlName="parentTaskId" (change)="searchTasks()">
+        <option [ngValue]="null">Select</option>
+        <option *ngFor="let taskLookup of taskLookups" [ngValue]="taskLookup.Id">{{taskLookup.Name}}</option>
+      </select>
     </div>
   </div>
   <div class="form-row">
@@ -20,15 +23,15 @@
     </div>
     <div class="form-group col-sm-3">
       <label for="startDate">Start Date:</label>
-      <input type="date" id="startDate" name="startDate" class="form-control" formControlName="startDate" />
+      <input type="date" id="startDate" name="startDate" class="form-control" formControlName="startDate" (change)="searchTasks()" />
     </div>
     <div class="form-group col-sm-3">
       <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" name="endDate" class="form-control" formControlName="endDate" />
+      <input type="date" id="endDate" name="endDate" class="form-control" formControlName="endDate" (change)="searchTasks()" />
     </div>
   </div>
 </form>
-<div *ngIf="true" class="mt-3">
+<div *ngIf="hasTasks; else noRecords" class="mt-3">
   <table class="table">
     <thead class="thead-light">
       <tr>
@@ -45,8 +48,8 @@
       <td>{{task.title}}</td>
       <td>{{task.parentTask}}</td>
       <td>{{task.priority}}</td>
-      <td>{{task.startDate}}</td>
-      <td>{{task.endDate}}</td>
+      <td>{{task.startDate | date: 'dd/MM/yyyy'}}</td>
+      <td>{{task.endDate | date: 'dd/MM/yyyy'}}</td>
       <td>
         <a class="btn btn-info" [routerLink]="['/update', task.id]">Edit</a>&nbsp;
         <button class="btn btn-danger" (click)="endTask(task.id)" *ngIf="!task.done">End Task</button>
@@ -54,3 +57,8 @@
     </tr>
   </table>
 </div>
+<ng-template #noRecords>
+  <div>
+    <b>No Records Found</b>
+  </div>
+</ng-template>

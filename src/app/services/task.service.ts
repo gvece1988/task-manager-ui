@@ -43,7 +43,7 @@ export class TaskService {
       title: task.Title,
       priority: task.Priority,
       parentTaskId: task.ParentTaskId,
-      parentTask: task.ParentTask != null ? task.ParentTask.Title : null,
+      parentTask: task.ParentTask ? task.ParentTask.Title : null,
       startDate: task.StartDate,
       endDate: task.EndDate,
       done: task.Done

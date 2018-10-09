@@ -23,6 +23,9 @@
     "@angular/platform-browser-dynamic": "6.0.7",
     "@angular/router": "6.0.7",
     "core-js": "^2.4.1",
+    "font-awesome": "^4.7.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.0.0-rc.0",
     "zone.js": "^0.8.19"
@@ -33,6 +36,7 @@
     "@angular/language-service": "^5.2.0",
     "@types/jasmine": "~2.8.3",
     "@types/jasminewd2": "~2.0.2",
+    "@types/lodash": "^4.14.116",
     "@types/node": "~6.0.60",
     "codelyzer": "^4.0.1",
     "jasmine-core": "~2.8.0",
