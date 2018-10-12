@@ -51,8 +51,10 @@
       <td>{{task.startDate | date: 'dd/MM/yyyy'}}</td>
       <td>{{task.endDate | date: 'dd/MM/yyyy'}}</td>
       <td>
-        <a class="btn btn-info" [routerLink]="['/update', task.id]">Edit</a>&nbsp;
-        <button class="btn btn-danger" (click)="endTask(task.id)" *ngIf="!task.done">End Task</button>
+        <div *ngIf="!task.done">
+          <a class="btn btn-info" [routerLink]="['/update', task.id]">Edit</a>&nbsp;
+          <button class="btn btn-danger" (click)="endTask(task.id)">End Task</button>
+        </div>
       </td>
     </tr>
   </table>

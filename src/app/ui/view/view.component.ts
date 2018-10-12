@@ -63,7 +63,7 @@ export class ViewComponent implements OnInit {
   endTask(taskId) {
     this.taskService.end(taskId).subscribe(
       () => {
-        alert("Task has been ended successfully");
+        alert("Task ended successfully");
         this.getTasks();
       });
   }

@@ -14,7 +14,7 @@ import * as moment from 'moment';
 })
 export class UpdateComponent implements OnInit {
   taskLookups;
-  taskForm : FormGroup;
+  taskForm: FormGroup;
   submitted = false;
 
   constructor(private fb: FormBuilder,
@@ -36,10 +36,11 @@ export class UpdateComponent implements OnInit {
     this.route.params
       .pipe(switchMap(params => this.taskService.getById(params["id"])))
       .subscribe(value => {
-        //this.taskForm.patchValue(value);
-        this.taskForm.patchValue(value);
-        console.log(moment(value.startDate).format("MM/DD/YYYY"));
-        this.taskForm.controls["startDate"].setValue(moment(value.startDate).format("MM-DD-YYYY"));
+        this.taskForm.patchValue({
+          ...value,
+          startDate: moment(value.startDate).format("YYYY-MM-DD"),
+          endDate: moment(value.endDate).format("YYYY-MM-DD")
+        });
       });
 
     this.taskService.getTaskLookups()

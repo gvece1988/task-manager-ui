@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { TaskService } from '../../services/task.service';
-import { FormUtils } from '../../shared/form.utils';
 
 @Component({
   selector: 'app-add',

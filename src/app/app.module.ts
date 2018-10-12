@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { AddComponent } from './ui/add/add.component';
 import { UpdateComponent } from './ui/update/update.component';
 import { ViewComponent } from './ui/view/view.component';
-import { FilterPipe } from './pipes/filter.pipe';
 import { TaskService } from './services/task.service';
 import { ApiService } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,8 +23,7 @@ const appRoutes: Routes = [
     AppComponent,
     AddComponent,
     UpdateComponent,
-    ViewComponent,
-    FilterPipe
+    ViewComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)
