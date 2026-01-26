@@ -12,7 +12,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/core": "^0.6.8",
+    "@angular-devkit/core": "^8.0.0",
     "@angular/animations": "6.0.7",
     "@angular/common": "6.0.7",
     "@angular/compiler": "6.0.7",
@@ -24,7 +24,7 @@
     "@angular/router": "6.0.7",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.23",
     "moment": "^2.22.2",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.0.0-rc.0",
