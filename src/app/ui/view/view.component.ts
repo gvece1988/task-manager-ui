@@ -60,6 +60,12 @@ export class ViewComponent implements OnInit {
       this.hasTasks = this.tasks.length > 0;
   }
 
+  clearFilters() {
+    this.taskSearchForm.reset();
+    this.tasks = this.tasksList || [];
+    this.hasTasks = this.tasks.length > 0;
+  }
+
   endTask(taskId) {
     this.taskService.end(taskId).subscribe(
       () => {
